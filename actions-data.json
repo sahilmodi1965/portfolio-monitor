@@ -1,0 +1,239 @@
+{
+  "generated_at": "2026-03-28T19:49:44.448Z",
+  "date_display": "Saturday, 28 March 2026",
+  "weekday": "Saturday",
+  "phase": {
+    "number": 1,
+    "name": "The Great Consolidation",
+    "description": "Selling micro positions and dead weight. Focus: free up capital, harvest tax losses, reduce from 305 to ~30 stocks.",
+    "progress_pct": 28
+  },
+  "market_pulse": {
+    "portfolio_value": 6939099.370000001,
+    "target_value": 10000000,
+    "gap_pct": 30.60900629999999,
+    "day_change_pct": -2.9087868852459033,
+    "brent_price": 105.32,
+    "positions_total": 305,
+    "positions_to_sell": 219,
+    "capital_in_cuts": 928820.0400000002
+  },
+  "todays_sells": [
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "TREL",
+      "sector": "Real Estate",
+      "currentValue": 3219.48,
+      "pnl": -19245.11,
+      "pnlPct": -85.67,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "SUBEXLTD",
+      "sector": "Technology",
+      "currentValue": 7.03,
+      "pnl": -29.08,
+      "pnlPct": -80.55,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "ITCHOTELS",
+      "sector": "Consumer Cyclical",
+      "currentValue": 283.54,
+      "pnl": -975.86,
+      "pnlPct": -77.49,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "MUFTI",
+      "sector": "Consumer Cyclical",
+      "currentValue": 68.67,
+      "pnl": -211.33,
+      "pnlPct": -75.47,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "GENESYS",
+      "sector": "Technology",
+      "currentValue": 227.95,
+      "pnl": -692.3,
+      "pnlPct": -75.38,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "SPANDANA",
+      "sector": "Financial Services",
+      "currentValue": 194.3,
+      "pnl": -518.65,
+      "pnlPct": -72.75,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "TODAY",
+      "instrument": "BLUSPRING",
+      "sector": "Industrials",
+      "currentValue": 51.31,
+      "pnl": -123.7,
+      "pnlPct": -70.68,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "THIS_WEEK",
+      "instrument": "GOCOLORS",
+      "sector": "Consumer Cyclical",
+      "currentValue": 257,
+      "pnl": -610.7,
+      "pnlPct": -70.38,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "THIS_WEEK",
+      "instrument": "PRINCEPIPE",
+      "sector": "Industrials",
+      "currentValue": 217.65,
+      "pnl": -456.9,
+      "pnlPct": -67.69,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    },
+    {
+      "type": "SELL",
+      "urgency": "THIS_WEEK",
+      "instrument": "KNRCON",
+      "sector": "Industrials",
+      "currentValue": 109.62,
+      "pnl": -223.38,
+      "pnlPct": -67.08,
+      "instruction": "Sell full position (dust — just clear it)",
+      "reason": "Small losing position — harvest the tax loss, redeploy the capital"
+    }
+  ],
+  "todays_buys": [],
+  "watch_list": [
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "BIGBLOC",
+      "sector": "Industrials",
+      "currentValue": 46642.05,
+      "pnl": -59922.35,
+      "pnlPct": -56.23,
+      "instruction": "Monitor — moved -9.3% today",
+      "reason": "BIGBLOC is down 9.3% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "NEWGEN",
+      "sector": "Technology",
+      "currentValue": 37980,
+      "pnl": -20470.5,
+      "pnlPct": -35.02,
+      "instruction": "Monitor — moved -3.3% today",
+      "reason": "NEWGEN is down 3.3% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "OSWALPUMPS",
+      "sector": "Industrials",
+      "currentValue": 79161.3,
+      "pnl": -39194.8,
+      "pnlPct": -33.12,
+      "instruction": "Monitor — moved -3.3% today",
+      "reason": "OSWALPUMPS is down 3.3% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "GULFOILLUB",
+      "sector": "Basic Materials",
+      "currentValue": 45265,
+      "pnl": -14522.7,
+      "pnlPct": -24.29,
+      "instruction": "Monitor — moved -4.0% today",
+      "reason": "GULFOILLUB is down 4.0% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "PATELENG",
+      "sector": "Industrials",
+      "currentValue": 72873.5,
+      "pnl": -20157.01,
+      "pnlPct": -21.67,
+      "instruction": "Monitor — moved -5.0% today",
+      "reason": "PATELENG is down 5.0% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "CEMPRO",
+      "sector": "Industrials",
+      "currentValue": 43226.299999999996,
+      "pnl": -11252.45,
+      "pnlPct": -20.65,
+      "instruction": "Monitor — moved -6.4% today",
+      "reason": "CEMPRO is down 6.4% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "ABFRL",
+      "sector": "Consumer Cyclical",
+      "currentValue": 62926.149999999994,
+      "pnl": -15304.52,
+      "pnlPct": -19.56,
+      "instruction": "Monitor — moved -3.1% today",
+      "reason": "ABFRL is down 3.1% today. Sharp drop — check if it's sector-wide or stock-specific."
+    },
+    {
+      "type": "WATCH",
+      "urgency": "TODAY",
+      "instrument": "ANANTRAJ",
+      "sector": "Real Estate",
+      "currentValue": 49852.200000000004,
+      "pnl": -10891.5,
+      "pnlPct": -17.93,
+      "instruction": "Monitor — moved -4.1% today",
+      "reason": "ANANTRAJ is down 4.1% today. Sharp drop — check if it's sector-wide or stock-specific."
+    }
+  ],
+  "hold_steady": {
+    "count": 86,
+    "value": 6010279.330000002
+  },
+  "daily_briefing": "We're in Phase 1: clearing out the clutter. 219 positions still need to go, holding ₹9.29L in trapped capital. Today's batch: 7 stocks to sell. Market was weak yesterday (-2.9%). Don't panic sell. If anything, pause sells and wait for a green day. Brent at $105 — oil-sensitive stocks under pressure. Favor IT and Pharma today.",
+  "tomorrow_preview": "Tomorrow: 10 more positions to sell. At this pace, Phase 1 completes in ~21 trading days (5 weeks).",
+  "weekly_goal": "This week's goal: sell 50 positions, free up ~₹23.2K. Keep selling into green days, pause on sharp red days.",
+  "sop_checklist": [
+    "Open this page and read today's briefing",
+    "Review the SELL list — execute sells marked \"TODAY\" first",
+    "Check the WATCH list — note any big movers or reversals",
+    "Park sale proceeds in liquid fund (will deploy in Phase 2)",
+    "At market close: Sahil exports fresh holdings.csv from Zerodha",
+    "Push to GitHub — tomorrow's actions auto-generate overnight"
+  ]
+}
