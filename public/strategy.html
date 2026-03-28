@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Strategy — The Road to 1 Crore</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e2e8f0;
+      --text-dim: #8b949e;
+      --gold: #f6c042;
+      --green: #3fb950;
+      --red: #f85149;
+      --blue: #58a6ff;
+      --amber: #d18616;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 780px; margin: 0 auto; padding: 40px 24px 80px; }
+    @media (max-width: 600px) { .container { padding: 24px 16px 60px; } }
+
+    /* Typography */
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 48px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    p {
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    .date { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 4px; font-family: -apple-system, sans-serif; }
+    strong { color: var(--text); }
+    .gold { color: var(--gold); }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .blue { color: var(--blue); }
+    .dim { color: var(--text-dim); }
+
+    /* Big number callout */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .callout-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+    }
+    .callout-label { font-size: 0.9rem; color: var(--text-dim); margin-top: 4px; }
+    .callout-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .callout-item { flex: 1; min-width: 140px; }
+
+    /* Strategy pod */
+    .pod {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+    }
+    .pod.recommended {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(246, 192, 66, 0.1);
+    }
+    .pod-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .pod-emoji { font-size: 2rem; }
+    .pod-title { font-size: 1.3rem; font-weight: 700; }
+    .pod-subtitle { color: var(--text-dim); font-size: 0.95rem; font-style: italic; }
+    .pod-section { margin-top: 16px; }
+    .pod-section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-family: -apple-system, sans-serif;
+      margin-bottom: 6px;
+    }
+    .pod-stat {
+      display: inline-block;
+      background: rgba(246, 192, 66, 0.1);
+      color: var(--gold);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-family: -apple-system, sans-serif;
+      font-weight: 600;
+      margin: 4px 4px 4px 0;
+    }
+    .pod-stat.green-stat {
+      background: rgba(63, 185, 80, 0.1);
+      color: var(--green);
+    }
+    .recommended-badge {
+      background: var(--gold);
+      color: #000;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-family: -apple-system, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Phase timeline */
+    .phase {
+      border-left: 3px solid var(--border);
+      padding-left: 24px;
+      margin: 24px 0;
+      position: relative;
+    }
+    .phase::before {
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 4px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+    .phase-header {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--gold);
+    }
+    .phase-time {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-family: -apple-system, sans-serif;
+    }
+    .phase-actions {
+      list-style: none;
+      margin-top: 8px;
+    }
+    .phase-actions li {
+      padding: 4px 0;
+      font-size: 0.95rem;
+    }
+    .phase-actions li::before {
+      content: '→ ';
+      color: var(--gold);
+    }
+
+    /* Sector insight */
+    .sector-insight {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .sector-insight:last-child { border-bottom: none; }
+    .sector-name {
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+    }
+    .sector-verdict {
+      font-size: 0.8rem;
+      font-family: -apple-system, sans-serif;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-left: 8px;
+    }
+    .verdict-add { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+    .verdict-hold { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
+    .verdict-trim { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+    .verdict-watch { background: rgba(209, 134, 22, 0.15); color: var(--amber); }
+    .verdict-neutral { background: rgba(139, 148, 158, 0.15); color: var(--text-dim); }
+
+    /* Pick list */
+    .pick {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+      font-size: 0.95rem;
+    }
+    .pick:last-child { border-bottom: none; }
+    .pick-stock {
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      color: var(--blue);
+    }
+
+    /* Macro card */
+    .macro-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 12px 0;
+    }
+    .macro-title {
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    /* Links */
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .loading { text-align: center; padding: 80px 20px; color: var(--text-dim); font-size: 1.1rem; }
+    .back-link {
+      font-family: -apple-system, sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      display: block;
+    }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    blockquote {
+      border-left: 3px solid var(--gold);
+      padding-left: 20px;
+      margin: 20px 0;
+      font-style: italic;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="loading">Loading strategy...</div>
+  </div>
+
+  <script>
+    const INR = (n) => {
+      const abs = Math.abs(n);
+      const sign = n < 0 ? '-' : '';
+      if (abs >= 1e7) return sign + '\u20B9' + (abs / 1e7).toFixed(2) + ' Cr';
+      if (abs >= 1e5) return sign + '\u20B9' + (abs / 1e5).toFixed(2) + 'L';
+      if (abs >= 1e3) return sign + '\u20B9' + (abs / 1e3).toFixed(1) + 'K';
+      return sign + '\u20B9' + abs.toFixed(0);
+    };
+
+    async function load() {
+      try {
+        const resp = await fetch('./strategy-data.json');
+        if (!resp.ok) throw new Error('No strategy data');
+        render(await resp.json());
+      } catch (e) {
+        document.getElementById('app').innerHTML =
+          '<div class="loading">Strategy data not found. Run <code>npm run build</code> first.</div>';
+      }
+    }
+
+    function verdictClass(v) {
+      if (v.includes('ADD') || v.includes('ANCHOR')) return 'verdict-add';
+      if (v.includes('HOLD') || v.includes('DEFENSIVE')) return 'verdict-hold';
+      if (v.includes('TRIM') || v.includes('OVERWEIGHT')) return 'verdict-trim';
+      if (v.includes('WATCH') || v.includes('BINARY')) return 'verdict-watch';
+      return 'verdict-neutral';
+    }
+
+    function render(d) {
+      const p = d.portfolio;
+      const c = d.consolidation;
+      const ts = new Date(d.generated_at).toLocaleDateString('en-IN', { dateStyle: 'long' });
+
+      let html = '';
+
+      // Header
+      html += '<a href="./index.html" class="back-link">\u2190 Back to dashboard</a>';
+      html += '<p class="date">' + ts + '</p>';
+      html += '<h1>The Road to \u20B91 Crore</h1>';
+      html += '<p class="subtitle">An investment strategy for the Modi family portfolio \u2014 ' + p.holdings_count + ' holdings, one clear objective.</p>';
+
+      // The Situation
+      html += '<div class="callout"><div class="callout-row">';
+      html += '<div class="callout-item"><div class="callout-number gold">' + INR(p.current_value) + '</div><div class="callout-label">Current Portfolio Value</div></div>';
+      html += '<div class="callout-item"><div class="callout-number green">' + INR(p.target_value) + '</div><div class="callout-label">Target</div></div>';
+      html += '<div class="callout-item"><div class="callout-number">' + p.growth_needed_pct.toFixed(0) + '%</div><div class="callout-label">Growth Needed</div></div>';
+      html += '</div></div>';
+
+      html += '<h2>Where We Stand</h2>';
+      html += '<p>We have ' + INR(p.current_value) + ' spread across <strong>' + p.holdings_count + ' stocks</strong>. That\'s too many. Most professional fund managers run 25-40 stocks with crores in capital. We\'re running 305 with ' + INR(p.current_value) + '. The average position is ' + INR(p.current_value / p.holdings_count) + ' \u2014 too small to make a difference even if it doubles.</p>';
+      html += '<p>Our portfolio is down <strong class="red">' + Math.abs(p.total_pnl_pct).toFixed(1) + '%</strong> overall (' + INR(p.total_pnl) + '). But here\'s what matters: <strong>we\'re not starting from zero</strong>. We have ' + INR(p.current_value) + ' of invested capital, real positions in real companies, and \u2014 most importantly \u2014 305 data points telling us exactly what\'s working and what isn\'t.</p>';
+
+      // The Consolidation Opportunity
+      html += '<h2>The Consolidation Opportunity</h2>';
+      html += '<p>Of our ' + p.holdings_count + ' stocks, <strong class="gold">' + c.cut.length + ' positions should be sold</strong>. These are the micro positions, the broken stories, and the dead weight. Selling them isn\'t giving up \u2014 it\'s focusing our ammunition.</p>';
+
+      html += '<div class="callout"><div class="callout-row">';
+      html += '<div class="callout-item"><div class="callout-number red">' + c.cut.length + '</div><div class="callout-label">Positions to Sell</div></div>';
+      html += '<div class="callout-item"><div class="callout-number gold">' + INR(c.freed_capital) + '</div><div class="callout-label">Capital Freed Up</div></div>';
+      html += '<div class="callout-item"><div class="callout-number green">' + INR(c.tax_harvestable_loss * 0.15) + '</div><div class="callout-label">Tax Savings (15% LTCG offset)</div></div>';
+      html += '</div></div>';
+
+      html += '<p>That\'s ' + INR(c.freed_capital) + ' of capital currently trapped in positions averaging ' + INR(c.freed_capital / c.cut.length) + ' each. Even if some of these double, the impact on a ' + INR(p.current_value) + ' portfolio is negligible. But consolidated and redeployed into our <strong>' + c.scaleUp.length + ' best ideas</strong>? That capital starts compounding meaningfully.</p>';
+
+      html += '<p><strong>' + c.keep.length + ' positions stay</strong> as they are \u2014 decent holdings worth monitoring. And <strong class="green">' + c.scaleUp.length + ' positions deserve more capital</strong> \u2014 these are our winners, our conviction bets, the ones that data says are working.</p>';
+
+      // Macro Context
+      html += '<h2>The World Right Now</h2>';
+      html += '<p>We\'re not investing in a vacuum. Three macro forces are shaping every stock in our portfolio:</p>';
+
+      html += '<div class="macro-card">';
+      html += '<div class="macro-title">\uD83D\uDEE2\uFE0F Oil &amp; The Hormuz Crisis</div>';
+      html += '<p style="margin-bottom:0">' + d.macro.hormuz_summary + '</p>';
+      html += '</div>';
+
+      html += '<div class="macro-card">';
+      html += '<div class="macro-title">\uD83D\uDCB1 The Rupee Factor</div>';
+      html += '<p style="margin-bottom:0">' + d.macro.inr_outlook + '</p>';
+      html += '</div>';
+
+      html += '<div class="macro-card">';
+      html += '<div class="macro-title">\uD83D\uDCC8 Market Phase</div>';
+      html += '<p style="margin-bottom:0">' + d.macro.market_phase + '</p>';
+      html += '</div>';
+
+      // The Optimist's Case
+      html += '<h2>Why We\'re Optimistic</h2>';
+      html += '<p>' + d.optimist_case + '</p>';
+
+      html += '<blockquote>"The stock market is a device for transferring money from the impatient to the patient." \u2014 Warren Buffett</blockquote>';
+
+      // Sector Insights
+      html += '<h2>Sector-by-Sector Playbook</h2>';
+      html += '<p>Every sector in our portfolio tells a story. Here\'s what the data and history say about each:</p>';
+
+      for (const s of d.sector_insights) {
+        html += '<div class="sector-insight">';
+        html += '<span class="sector-name">' + s.sector + '</span>';
+        html += ' <span class="dim">(' + s.pct.toFixed(1) + '% of portfolio)</span>';
+        html += ' <span class="sector-verdict ' + verdictClass(s.verdict) + '">' + s.verdict + '</span>';
+        html += '<p style="margin-top:8px;margin-bottom:0;font-size:0.95rem">' + s.reasoning + '</p>';
+        html += '</div>';
+      }
+
+      // Strategy Pods
+      html += '<h2>Four Paths to \u20B91 Crore</h2>';
+      html += '<p>There is no single "right" strategy. But there are strategies grounded in data and historical precedent. Here are four approaches, each with a different risk-reward profile. We recommend the Hybrid \u2014 but all four are valid.</p>';
+
+      for (const pod of d.pods) {
+        const isRec = pod.id === d.recommended_pod;
+        html += '<div class="pod' + (isRec ? ' recommended' : '') + '">';
+        html += '<div class="pod-header">';
+        html += '<span class="pod-emoji">' + pod.emoji + '</span>';
+        html += '<div><div class="pod-title">' + pod.name + (isRec ? ' <span class="recommended-badge">Recommended</span>' : '') + '</div>';
+        html += '<div class="pod-subtitle">' + pod.subtitle + '</div></div>';
+        html += '</div>';
+
+        html += '<p>' + pod.philosophy + '</p>';
+
+        html += '<div class="pod-section"><div class="pod-section-title">Historical Precedent</div>';
+        html += '<p style="font-size:0.95rem">' + pod.historicalParallel + '</p>';
+        html += '<p style="font-size:0.9rem;color:var(--green)"><strong>What happened:</strong> ' + pod.historicalOutcome + '</p>';
+        html += '</div>';
+
+        html += '<div class="pod-section"><div class="pod-section-title">Key Moves</div>';
+        for (const tilt of pod.sectorTilts) {
+          html += '<p style="margin-bottom:6px;font-size:0.95rem">\u2192 ' + tilt + '</p>';
+        }
+        html += '</div>';
+
+        if (pod.topPicks && pod.topPicks.length > 0) {
+          html += '<div class="pod-section"><div class="pod-section-title">Top Picks from Our Portfolio</div>';
+          for (const pick of pod.topPicks) {
+            html += '<div class="pick"><span class="pick-stock">' + pick.stock + '</span> \u2014 ' + pick.reason + '</div>';
+          }
+          html += '</div>';
+        }
+
+        html += '<div style="margin-top:16px">';
+        html += '<span class="pod-stat">' + pod.expectedReturn + '</span> ';
+        html += '<span class="pod-stat green-stat">P(\u20B91Cr): ' + pod.probabilityOf1Cr + '</span> ';
+        html += '<span class="pod-stat">' + pod.timeline + '</span>';
+        html += '</div>';
+
+        html += '<div class="pod-section"><div class="pod-section-title">Best If</div>';
+        html += '<p style="margin-bottom:0;font-size:0.95rem">' + pod.bestIf + '</p></div>';
+
+        html += '<div class="pod-section"><div class="pod-section-title">Key Risk</div>';
+        html += '<p style="margin-bottom:0;font-size:0.95rem;color:var(--red)">' + pod.risk + '</p></div>';
+
+        html += '</div>';
+      }
+
+      // Action Plan
+      html += '<h2>The Action Plan</h2>';
+      html += '<p>Strategy without execution is just a wish. Here\'s the phase-by-phase playbook:</p>';
+
+      for (const phase of d.action_phases) {
+        html += '<div class="phase">';
+        html += '<div class="phase-header">' + phase.phase + '</div>';
+        html += '<div class="phase-time">' + phase.months + '</div>';
+        html += '<p style="font-size:0.95rem;margin:8px 0">' + phase.description + '</p>';
+        html += '<ul class="phase-actions">';
+        for (const a of phase.actions) {
+          html += '<li>' + a + '</li>';
+        }
+        html += '</ul></div>';
+      }
+
+      // Scale Up list
+      if (c.scaleUp.length > 0) {
+        html += '<h2>The ' + c.scaleUp.length + ' Stocks to Scale Up</h2>';
+        html += '<p>These are our highest-conviction positions \u2014 the ones where data, momentum, and fundamentals align. The plan is to increase each to 3-5% of the portfolio.</p>';
+        for (const s of c.scaleUp) {
+          html += '<div class="pick">';
+          html += '<span class="pick-stock">' + s.instrument + '</span>';
+          html += ' <span class="dim">' + s.sector + '</span>';
+          html += ' \u2014 ' + s.reason;
+          html += ' <span style="font-family:-apple-system,sans-serif;font-size:0.85rem" class="' + (s.pnl >= 0 ? 'green' : 'red') + '">(P&L: ' + (s.pnl >= 0 ? '+' : '') + INR(s.pnl) + ')</span>';
+          html += '</div>';
+        }
+      }
+
+      // Closing
+      html += '<hr class="divider">';
+      html += '<h2>The Bottom Line</h2>';
+      html += '<p>We have ' + INR(p.current_value) + ' and a target of \u20B91 Crore. The gap is ' + p.growth_needed_pct.toFixed(0) + '%. History says Indian mid-cap portfolios deliver that kind of return in 18-24 months after a correction. We\'re in a correction right now.</p>';
+      html += '<p>The single biggest risk isn\'t the market, the rupee, or even Hormuz. <strong>The biggest risk is doing nothing.</strong> 305 scattered positions won\'t get us to \u20B91 Crore. A focused, macro-aware, historically-grounded 30-stock portfolio just might.</p>';
+      html += '<p class="gold" style="font-size:1.15rem;font-weight:700">The data is in our favor. The history is in our favor. The plan is clear. Let\'s execute.</p>';
+
+      html += '<hr class="divider">';
+      html += '<p class="dim" style="font-size:0.8rem;font-family:-apple-system,sans-serif">Generated on ' + ts + '. This is a data-driven analysis, not financial advice. All investment decisions should be made after consulting with a qualified financial advisor. Past performance does not guarantee future results. <a href="./index.html">View full dashboard \u2192</a></p>';
+
+      document.getElementById('app').innerHTML = html;
+    }
+
+    load();
+  </script>
+</body>
+</html>

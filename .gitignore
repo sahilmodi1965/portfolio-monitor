@@ -1,6 +1,7 @@
 node_modules/
 dist/
 public/dashboard-data.json
+public/strategy-data.json
 data/signal-history.json
 .DS_Store
 *.log

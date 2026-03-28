@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { parseHoldingsCSV } from './csv-parser.js';
 import { enrichHoldings } from './enricher.js';
 import { computeSignals } from './signals.js';
+import { computeStrategy } from './strategy.js';
 import { loadConfig, PROJECT_ROOT } from './config.js';
 import { log, err, formatINR } from './utils.js';
 import type { DashboardData, EnrichedHolding, StockSignal, SectorSummary } from './types.js';
@@ -117,6 +118,11 @@ async function main() {
   // Write signal history
   updateSignalHistory(signals);
 
+  // Compute strategy
+  const strategy = computeStrategy(enriched, config, brentPrice, sectors, signals);
+  log(`Strategy: ${strategy.consolidation.cut.length} CUT, ${strategy.consolidation.keep.length} KEEP, ${strategy.consolidation.scaleUp.length} SCALE UP`);
+  log(`Freed capital from consolidation: ${formatINR(strategy.consolidation.freed_capital)}`);
+
   // Top winners and bleeders
   const sorted = [...enriched].sort((a, b) => b.pnl - a.pnl);
   const topWinners = sorted.slice(0, 5);
@@ -146,6 +152,11 @@ async function main() {
   mkdirSync(publicDir, { recursive: true });
   const outputPath = resolve(publicDir, 'dashboard-data.json');
   writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2));
+
+  // Write strategy data
+  const strategyPath = resolve(publicDir, 'strategy-data.json');
+  writeFileSync(strategyPath, JSON.stringify(strategy, null, 2));
+  log('Strategy data written');
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   log(`Dashboard data written to ${outputPath}`);
