@@ -8,6 +8,7 @@ on:
       - 'src/**'
       - 'config.json'
       - 'public/index.html'
+      - '.github/workflows/**'
 
   workflow_dispatch:
 
