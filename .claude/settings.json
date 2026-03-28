@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)", "Bash(npm *)", "Bash(npx *)", "Bash(node *)",
+      "Bash(cp *)", "Bash(mkdir *)", "Bash(cat *)", "Bash(echo *)",
+      "Bash(ls *)", "Bash(head *)", "Bash(tail *)", "Bash(wc *)",
+      "Bash(grep *)", "Bash(sed *)", "Bash(python3 *)", "Bash(date *)",
+      "Bash(mktemp *)", "Bash(rm *)", "Bash(open *)", "Bash(chmod *)",
+      "Write", "Edit", "Read"
+    ],
+    "deny": [
+      "Bash(curl *api.kite.trade/orders*)",
+      "Bash(curl *api.kite.trade/trades*)"
+    ]
+  }
+}

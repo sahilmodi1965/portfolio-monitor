@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Monitor</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-dim: #8b949e;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --blue: #58a6ff;
+      --orange: #d18616;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 4px; }
+    h2 { font-size: 1.1rem; margin-bottom: 12px; color: var(--blue); }
+    .subtitle { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+    .card-value { font-size: 1.5rem; font-weight: 700; margin-top: 4px; }
+    .card-detail { font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+    .positive { color: var(--green); }
+    .negative { color: var(--red); }
+    .warning { color: var(--yellow); }
+
+    .signal-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .signal-card { text-align: center; }
+    .signal-card.exit { border-color: var(--red); }
+    .signal-card.watch { border-color: var(--yellow); }
+    .signal-card.hold { border-color: var(--green); }
+    .signal-count { font-size: 2rem; font-weight: 700; }
+    .exit .signal-count { color: var(--red); }
+    .watch .signal-count { color: var(--yellow); }
+    .hold .signal-count { color: var(--green); }
+
+    .circuit-breaker {
+      background: var(--red);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      display: none;
+    }
+    .circuit-breaker.active { display: block; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+    th {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+    }
+    td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:hover { background: rgba(88, 166, 255, 0.05); }
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+    .table-wrap::-webkit-scrollbar { height: 6px; }
+    .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .sector-bars { margin-bottom: 20px; }
+    .sector-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .sector-bar-label { min-width: 140px; font-size: 0.8rem; text-align: right; color: var(--text-dim); }
+    .sector-bar-track { flex: 1; background: var(--card); border-radius: 4px; height: 20px; overflow: hidden; }
+    .sector-bar-fill { height: 100%; border-radius: 4px; min-width: 2px; display: flex; align-items: center; padding-left: 6px; font-size: 0.7rem; font-weight: 600; }
+    .sector-bar-fill.oil { background: var(--orange); }
+    .sector-bar-fill.normal { background: var(--blue); }
+    .sector-bar-pct { min-width: 45px; font-size: 0.8rem; color: var(--text-dim); }
+
+    .pnl-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    @media (max-width: 600px) {
+      .pnl-section { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      .signal-cards { grid-template-columns: repeat(3, 1fr); }
+      body { padding: 10px; }
+      h1 { font-size: 1.3rem; }
+      .card-value { font-size: 1.2rem; }
+      .sector-bar-label { min-width: 100px; font-size: 0.7rem; }
+      table { font-size: 0.75rem; }
+      th, td { padding: 6px 4px; }
+    }
+    .pnl-list .pnl-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+
+    .explainer {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border-left: 3px solid var(--border);
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+    .search-box::placeholder { color: var(--text-dim); }
+
+    .loading { text-align: center; padding: 60px 20px; color: var(--text-dim); }
+    .error { text-align: center; padding: 60px 20px; color: var(--red); }
+
+    .section { margin-bottom: 28px; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .badge-exit { background: rgba(248, 81, 73, 0.2); color: var(--red); }
+    .badge-watch { background: rgba(210, 153, 34, 0.2); color: var(--yellow); }
+    .badge-hold { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="loading" id="loading">Loading portfolio data...</div>
+  </div>
+
+  <script>
+    const INR = (n) => {
+      const abs = Math.abs(n);
+      const sign = n < 0 ? '-' : '';
+      if (abs >= 1e7) return sign + '\u20B9' + (abs / 1e7).toFixed(2) + 'Cr';
+      if (abs >= 1e5) return sign + '\u20B9' + (abs / 1e5).toFixed(2) + 'L';
+      if (abs >= 1e3) return sign + '\u20B9' + (abs / 1e3).toFixed(1) + 'K';
+      return sign + '\u20B9' + abs.toFixed(2);
+    };
+    const pct = (n) => (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+    const pnlClass = (n) => n >= 0 ? 'positive' : 'negative';
+
+    async function loadDashboard() {
+      try {
+        const resp = await fetch('./dashboard-data.json');
+        if (!resp.ok) throw new Error('Failed to load data');
+        const data = await resp.json();
+        render(data);
+      } catch (e) {
+        document.getElementById('app').innerHTML =
+          '<div class="error">Could not load dashboard data.<br>Run <code>npm run build</code> first to generate dashboard-data.json</div>';
+      }
+    }
+
+    function render(data) {
+      const p = data.portfolio;
+      const signals = data.signals || {};
+      const signalCounts = { EXIT: 0, WATCH: 0, HOLD: 0 };
+      let exitValue = 0;
+      for (const [sym, sig] of Object.entries(signals)) {
+        signalCounts[sig.signal] = (signalCounts[sig.signal] || 0) + 1;
+        if (sig.signal === 'EXIT') {
+          const h = data.holdings.find(x => x.instrument === sym);
+          if (h) exitValue += h.currentPrice * h.qty;
+        }
+      }
+
+      const exitHoldings = data.holdings
+        .filter(h => signals[h.instrument]?.signal === 'EXIT')
+        .sort((a, b) => a.pnl - b.pnl);
+
+      const ts = new Date(data.generated_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+
+      let html = '';
+
+      // Header
+      html += '<h1>Portfolio Monitor</h1>';
+      html += '<p class="subtitle">Last updated: ' + ts + ' &middot; ' + p.holdings_count + ' holdings</p>';
+
+      // Portfolio cards
+      html += '<div class="cards">';
+      html += card('Portfolio Value', INR(p.current_value), 'Invested: ' + INR(p.total_invested));
+      html += card('Total P&amp;L', INR(p.total_pnl), pct(p.total_pnl_pct), p.total_pnl >= 0 ? 'positive' : 'negative');
+      html += card('Brent Crude', data.brent_price ? '$' + data.brent_price.toFixed(2) : 'N/A', 'Oil price gate');
+      html += '</div>';
+      html += '<div class="explainer">Your portfolio\'s total current value and profit/loss. Brent crude oil price affects oil-sensitive stock signals.</div>';
+
+      // Circuit breaker
+      html += '<div class="circuit-breaker' + (data.circuit_breaker ? ' active' : '') + '">';
+      html += data.circuit_breaker ? '\u26A0\uFE0F Circuit Breaker: ' + data.circuit_breaker : '';
+      html += '</div>';
+
+      // Signal cards
+      html += '<div class="section"><h2>Signal Summary</h2>';
+      html += '<div class="signal-cards">';
+      html += signalCard('EXIT', signalCounts.EXIT, INR(exitValue), 'exit');
+      html += signalCard('WATCH', signalCounts.WATCH, '', 'watch');
+      html += signalCard('HOLD', signalCounts.HOLD, '', 'hold');
+      html += '</div>';
+      html += '<div class="explainer">EXIT = consider selling soon. WATCH = keep an eye on it. HOLD = no action needed right now.</div>';
+      html += '</div>';
+
+      // EXIT table
+      if (exitHoldings.length > 0) {
+        html += '<div class="section"><h2>EXIT Signals</h2>';
+        html += '<div class="explainer">These stocks have triggered one or more exit rules. Review each one and decide if you want to sell.</div>';
+        html += '<div class="table-wrap"><table>';
+        html += '<tr><th>Stock</th><th>Sector</th><th>P&amp;L</th><th>Drop%</th><th>Reason</th></tr>';
+        for (const h of exitHoldings) {
+          const sig = signals[h.instrument];
+          const drop = h.fiftyTwoWeekHigh > 0 ? ((h.currentPrice - h.fiftyTwoWeekHigh) / h.fiftyTwoWeekHigh * 100) : 0;
+          html += '<tr>';
+          html += '<td><strong>' + h.instrument + '</strong></td>';
+          html += '<td>' + h.sector + '</td>';
+          html += '<td class="' + pnlClass(h.pnl) + '">' + INR(h.pnl) + '</td>';
+          html += '<td class="negative">' + drop.toFixed(1) + '%</td>';
+          html += '<td>' + (sig?.reasons?.join('; ') || '-') + '</td>';
+          html += '</tr>';
+        }
+        html += '</table></div></div>';
+      }
+
+      // Sector concentration bars
+      html += '<div class="section"><h2>Sector Concentration</h2>';
+      html += '<div class="explainer">Shows how much of your money is in each sector. Too much in one sector = higher risk. Oil-sensitive sectors are flagged orange.</div>';
+      html += '<div class="sector-bars">';
+      const sortedSectors = Object.entries(data.sectors).sort((a, b) => b[1].pct - a[1].pct);
+      for (const [name, sec] of sortedSectors) {
+        if (sec.pct < 0.5) continue;
+        const fillClass = sec.isOilSensitive ? 'oil' : 'normal';
+        const width = Math.max(sec.pct * 2, 1);
+        html += '<div class="sector-bar-row">';
+        html += '<span class="sector-bar-label">' + name + (sec.isOilSensitive ? ' \uD83D\uDEE2\uFE0F' : '') + '</span>';
+        html += '<div class="sector-bar-track"><div class="sector-bar-fill ' + fillClass + '" style="width:' + width + '%">' + sec.count + '</div></div>';
+        html += '<span class="sector-bar-pct">' + sec.pct.toFixed(1) + '%</span>';
+        html += '</div>';
+      }
+      html += '</div></div>';
+
+      // P&L: Top 5 winners and bleeders
+      html += '<div class="section"><h2>P&amp;L Tracker</h2>';
+      html += '<div class="explainer">Your biggest money makers and biggest losses. Green = profit, Red = loss.</div>';
+      html += '<div class="pnl-section">';
+      html += '<div class="card"><h2 style="color:var(--green)">Top 5 Winners</h2><div class="pnl-list">';
+      for (const h of data.top_winners) {
+        html += '<div class="pnl-item"><span>' + h.instrument + '</span><span class="positive">' + INR(h.pnl) + ' (' + pct(h.netChgPct) + ')</span></div>';
+      }
+      html += '</div></div>';
+      html += '<div class="card"><h2 style="color:var(--red)">Top 5 Bleeders</h2><div class="pnl-list">';
+      for (const h of data.top_bleeders) {
+        html += '<div class="pnl-item"><span>' + h.instrument + '</span><span class="negative">' + INR(h.pnl) + ' (' + pct(h.netChgPct) + ')</span></div>';
+      }
+      html += '</div></div>';
+      html += '</div></div>';
+
+      // All Holdings table
+      html += '<div class="section"><h2>All Holdings</h2>';
+      html += '<input type="text" class="search-box" id="search" placeholder="Search by stock name or sector...">';
+      html += '<div class="explainer">Click column headers to sort. Search filters by stock name or sector.</div>';
+      html += '<div class="table-wrap"><table id="holdings-table">';
+      html += '<tr><th data-sort="instrument" style="cursor:pointer">Stock</th>';
+      html += '<th>Sector</th>';
+      html += '<th data-sort="qty" style="cursor:pointer">Qty</th>';
+      html += '<th data-sort="currentPrice" style="cursor:pointer">Price</th>';
+      html += '<th data-sort="invested" style="cursor:pointer">Invested</th>';
+      html += '<th data-sort="currentValue" style="cursor:pointer">Value</th>';
+      html += '<th data-sort="pnl" style="cursor:pointer">P&amp;L</th>';
+      html += '<th data-sort="netChgPct" style="cursor:pointer">Chg%</th>';
+      html += '<th>Signal</th></tr>';
+      html += '</table></div></div>';
+
+      document.getElementById('app').innerHTML = html;
+
+      // Render table rows (separate for search/sort)
+      renderHoldingsTable(data.holdings, signals);
+      setupSearch(data.holdings, signals);
+      setupSort(data.holdings, signals);
+    }
+
+    function renderHoldingsTable(holdings, signals, sortKey, sortDir) {
+      let rows = [...holdings];
+      if (sortKey) {
+        rows.sort((a, b) => {
+          let va = a[sortKey], vb = b[sortKey];
+          if (typeof va === 'string') return sortDir * va.localeCompare(vb);
+          return sortDir * (va - vb);
+        });
+      }
+
+      const table = document.getElementById('holdings-table');
+      // Remove old rows
+      while (table.rows.length > 1) table.deleteRow(1);
+
+      for (const h of rows) {
+        const sig = signals[h.instrument];
+        const sigClass = sig ? sig.signal.toLowerCase() : 'hold';
+        const row = table.insertRow();
+        row.innerHTML =
+          '<td><strong>' + h.instrument + '</strong></td>' +
+          '<td>' + h.sector + '</td>' +
+          '<td>' + h.qty + '</td>' +
+          '<td>\u20B9' + h.currentPrice.toFixed(2) + '</td>' +
+          '<td>' + INR(h.invested) + '</td>' +
+          '<td>' + INR(h.currentPrice * h.qty) + '</td>' +
+          '<td class="' + pnlClass(h.pnl) + '">' + INR(h.pnl) + '</td>' +
+          '<td class="' + pnlClass(h.netChgPct) + '">' + pct(h.netChgPct) + '</td>' +
+          '<td><span class="badge badge-' + sigClass + '">' + (sig ? sig.signal : 'HOLD') + '</span></td>';
+        row.dataset.instrument = h.instrument.toLowerCase();
+        row.dataset.sector = h.sector.toLowerCase();
+      }
+    }
+
+    function setupSearch(holdings, signals) {
+      document.getElementById('search').addEventListener('input', function() {
+        const q = this.value.toLowerCase();
+        const table = document.getElementById('holdings-table');
+        for (let i = 1; i < table.rows.length; i++) {
+          const row = table.rows[i];
+          const match = row.dataset.instrument.includes(q) || row.dataset.sector.includes(q);
+          row.style.display = match ? '' : 'none';
+        }
+      });
+    }
+
+    let currentSort = { key: null, dir: 1 };
+    function setupSort(holdings, signals) {
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        th.addEventListener('click', function() {
+          const key = this.dataset.sort;
+          if (currentSort.key === key) currentSort.dir *= -1;
+          else { currentSort.key = key; currentSort.dir = 1; }
+          renderHoldingsTable(holdings, signals, key, currentSort.dir);
+        });
+      });
+    }
+
+    function card(label, value, detail, cls) {
+      return '<div class="card"><div class="card-label">' + label + '</div>' +
+        '<div class="card-value ' + (cls || '') + '">' + value + '</div>' +
+        (detail ? '<div class="card-detail ' + (cls || '') + '">' + detail + '</div>' : '') +
+        '</div>';
+    }
+
+    function signalCard(label, count, detail, cls) {
+      return '<div class="card signal-card ' + cls + '"><div class="card-label">' + label + '</div>' +
+        '<div class="signal-count">' + count + '</div>' +
+        (detail ? '<div class="card-detail">' + detail + '</div>' : '') +
+        '</div>';
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

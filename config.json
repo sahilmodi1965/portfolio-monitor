@@ -1,0 +1,51 @@
+{
+  "thresholds": {
+    "trailing_stop_pct": 15,
+    "momentum_exit_pct": 10,
+    "momentum_watch_pct": 5,
+    "drawdown_exit_pct": 50,
+    "drawdown_oil_exit_pct": 40,
+    "drawdown_watch_pct": 30,
+    "tiny_position_pct": 1,
+    "sector_concentration_pct": 25,
+    "oil_sector_concentration_pct": 30,
+    "brent_crisis_usd": 100,
+    "brent_watch_usd": 90,
+    "portfolio_caution_pct": 8,
+    "portfolio_reduce_pct": 12,
+    "portfolio_exit_pct": 18
+  },
+  "yahoo": {
+    "delay_ms": 500,
+    "sector_cache_ttl_days": 7,
+    "chart_range": "1y",
+    "chart_interval": "1wk"
+  },
+  "oil_sensitive_sectors": [
+    "Energy",
+    "Utilities",
+    "Oil & Gas",
+    "Oil",
+    "Gas",
+    "Airlines",
+    "Paint",
+    "Logistics",
+    "Cement",
+    "Chemical",
+    "Tyre",
+    "Tire",
+    "Power"
+  ],
+  "oil_resistant_sectors": [
+    "Technology",
+    "Healthcare",
+    "Consumer Defensive",
+    "Communication Services",
+    "Financial Services",
+    "IT",
+    "Pharma",
+    "FMCG",
+    "Telecom",
+    "Insurance"
+  ]
+}

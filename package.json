@@ -1,0 +1,15 @@
+{
+  "name": "portfolio-monitor",
+  "version": "1.0.0",
+  "description": "Portfolio intelligence dashboard for Indian stock holdings",
+  "type": "module",
+  "scripts": {
+    "build": "tsx src/pipeline.ts",
+    "test": "node --import tsx/esm --test tests/*.test.ts",
+    "preview": "open public/index.html"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

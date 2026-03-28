@@ -1,0 +1,2 @@
+- [User Profile](user_profile.md) — Sahil, PM role, Indian stock investor using Zerodha Kite, father reads dashboard
+- [Portfolio Project](project_portfolio.md) — Building portfolio intelligence dashboard with Yahoo Finance enrichment + GitHub Pages deploy
