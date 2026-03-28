@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Today's Actions — Portfolio Monitor</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --border: #30363d;
+      --text: #e6edf3; --dim: #8b949e; --gold: #f6c042;
+      --green: #3fb950; --red: #f85149; --blue: #58a6ff; --amber: #d18616;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      max-width: 800px; margin: 0 auto; padding: 20px 16px 60px;
+    }
+    h1 { font-size: 1.6rem; margin-bottom: 2px; }
+    h2 { font-size: 1.15rem; color: var(--blue); margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    .date { color: var(--gold); font-size: 1.1rem; font-weight: 600; }
+    .phase-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 16px 0; }
+    .phase-name { font-weight: 700; color: var(--gold); font-size: 1rem; }
+    .phase-desc { color: var(--dim); font-size: 0.85rem; margin-top: 4px; }
+    .progress-track { background: var(--border); border-radius: 6px; height: 8px; margin-top: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--gold), var(--green)); transition: width 0.5s; }
+    .progress-label { font-size: 0.75rem; color: var(--dim); margin-top: 4px; text-align: right; }
+
+    .briefing { background: var(--surface); border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0; padding: 16px; margin: 16px 0; font-size: 0.95rem; line-height: 1.7; }
+
+    .pulse { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 16px 0; }
+    .pulse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+    .pulse-val { font-size: 1.3rem; font-weight: 700; }
+    .pulse-label { font-size: 0.7rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+    .action-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px; margin: 8px 0; display: flex; gap: 12px; align-items: flex-start;
+    }
+    .action-card.sell { border-left: 4px solid var(--red); }
+    .action-card.buy { border-left: 4px solid var(--green); }
+    .action-card.watch { border-left: 4px solid var(--amber); }
+    .action-badge {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+    }
+    .badge-today { background: rgba(248,81,73,0.2); color: var(--red); }
+    .badge-week { background: rgba(210,153,34,0.2); color: var(--amber); }
+    .badge-ready { background: rgba(139,148,158,0.2); color: var(--dim); }
+    .action-stock { font-weight: 700; font-size: 1rem; }
+    .action-sector { color: var(--dim); font-size: 0.8rem; }
+    .action-instruction { font-size: 0.9rem; margin-top: 4px; }
+    .action-reason { font-size: 0.8rem; color: var(--dim); margin-top: 2px; }
+    .action-value { font-size: 0.8rem; margin-top: 4px; }
+    .green { color: var(--green); } .red { color: var(--red); } .gold { color: var(--gold); }
+
+    .sop { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 16px 0; }
+    .sop-item { padding: 6px 0; font-size: 0.9rem; display: flex; gap: 10px; align-items: flex-start; }
+    .sop-num { background: var(--gold); color: #000; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .preview { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 16px 0; }
+    .preview-title { font-weight: 600; color: var(--dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+
+    .hold-summary { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin: 8px 0; text-align: center; }
+    .hold-summary .pulse-val { color: var(--green); }
+
+    .nav { display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.85rem; }
+    .nav a { color: var(--dim); text-decoration: none; } .nav a:hover { color: var(--blue); }
+    .loading { text-align: center; padding: 60px; color: var(--dim); }
+    @media (max-width: 600px) { .pulse { grid-template-columns: repeat(2, 1fr); } body { padding: 12px 10px 40px; } }
+  </style>
+</head>
+<body>
+  <div id="app"><div class="loading">Loading today's actions...</div></div>
+  <script>
+    const INR = (n) => {
+      const abs = Math.abs(n); const sign = n < 0 ? '-' : '';
+      if (abs >= 1e7) return sign + '\u20B9' + (abs/1e7).toFixed(2) + 'Cr';
+      if (abs >= 1e5) return sign + '\u20B9' + (abs/1e5).toFixed(2) + 'L';
+      if (abs >= 1e3) return sign + '\u20B9' + (abs/1e3).toFixed(1) + 'K';
+      return sign + '\u20B9' + abs.toFixed(0);
+    };
+    const pnlCls = n => n >= 0 ? 'green' : 'red';
+    const pnlSign = n => n >= 0 ? '+' : '';
+    const urgBadge = u => u === 'TODAY' ? '<span class="action-badge badge-today">Today</span>' :
+      u === 'THIS_WEEK' ? '<span class="action-badge badge-week">This Week</span>' :
+      '<span class="action-badge badge-ready">When Ready</span>';
+
+    async function load() {
+      try {
+        const r = await fetch('./actions-data.json');
+        if (!r.ok) throw new Error();
+        render(await r.json());
+      } catch { document.getElementById('app').innerHTML = '<div class="loading">No actions data. Run <code>npm run build</code> first.</div>'; }
+    }
+
+    function actionCard(a, type) {
+      return '<div class="action-card ' + type + '">' +
+        '<div style="flex:1">' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+        '<span class="action-stock">' + a.instrument + '</span>' +
+        '<span class="action-sector">' + a.sector + '</span>' +
+        urgBadge(a.urgency) +
+        '</div>' +
+        '<div class="action-instruction">' + a.instruction + '</div>' +
+        '<div class="action-reason">' + a.reason + '</div>' +
+        '<div class="action-value">' +
+        'Value: ' + INR(a.currentValue) +
+        ' &middot; P&L: <span class="' + pnlCls(a.pnl) + '">' + pnlSign(a.pnl) + INR(a.pnl) + ' (' + pnlSign(a.pnlPct) + a.pnlPct.toFixed(1) + '%)</span>' +
+        '</div></div></div>';
+    }
+
+    function render(d) {
+      let h = '';
+
+      // Nav
+      h += '<div class="nav"><a href="./index.html">\u2190 Dashboard</a><a href="./strategy.html">Strategy</a></div>';
+
+      // Header
+      h += '<p class="date">' + d.date_display + '</p>';
+      h += '<h1>Today\u2019s Actions</h1>';
+
+      // Phase
+      h += '<div class="phase-bar">';
+      h += '<div class="phase-name">Phase ' + d.phase.number + ': ' + d.phase.name + '</div>';
+      h += '<div class="phase-desc">' + d.phase.description + '</div>';
+      h += '<div class="progress-track"><div class="progress-fill" style="width:' + d.phase.progress_pct + '%"></div></div>';
+      h += '<div class="progress-label">' + d.phase.progress_pct + '% complete</div>';
+      h += '</div>';
+
+      // Briefing
+      h += '<div class="briefing">' + d.daily_briefing + '</div>';
+
+      // Market Pulse
+      h += '<div class="pulse">';
+      h += '<div class="pulse-card"><div class="pulse-val gold">' + INR(d.market_pulse.portfolio_value) + '</div><div class="pulse-label">Portfolio</div></div>';
+      h += '<div class="pulse-card"><div class="pulse-val green">' + INR(d.market_pulse.target_value) + '</div><div class="pulse-label">Target</div></div>';
+      h += '<div class="pulse-card"><div class="pulse-val">' + d.market_pulse.positions_total + '</div><div class="pulse-label">Positions</div></div>';
+      h += '<div class="pulse-card"><div class="pulse-val red">' + d.market_pulse.positions_to_sell + '</div><div class="pulse-label">To Sell</div></div>';
+      h += '<div class="pulse-card"><div class="pulse-val gold">' + INR(d.market_pulse.capital_in_cuts) + '</div><div class="pulse-label">Trapped Capital</div></div>';
+      if (d.market_pulse.brent_price) {
+        h += '<div class="pulse-card"><div class="pulse-val">$' + d.market_pulse.brent_price.toFixed(0) + '</div><div class="pulse-label">Brent Crude</div></div>';
+      }
+      h += '</div>';
+
+      // SOP Checklist
+      h += '<h2>Daily SOP</h2>';
+      h += '<div class="sop">';
+      d.sop_checklist.forEach((item, i) => {
+        h += '<div class="sop-item"><span class="sop-num">' + (i+1) + '</span><span>' + item + '</span></div>';
+      });
+      h += '</div>';
+
+      // Today's Sells
+      if (d.todays_sells.length > 0) {
+        const todayCount = d.todays_sells.filter(s => s.urgency === 'TODAY').length;
+        const todayValue = d.todays_sells.filter(s => s.urgency === 'TODAY').reduce((s,a) => s + a.currentValue, 0);
+        h += '<h2>Sell Today (' + todayCount + ' stocks, ~' + INR(todayValue) + ')</h2>';
+        for (const a of d.todays_sells) h += actionCard(a, 'sell');
+      } else {
+        h += '<h2>Sells</h2><div class="hold-summary"><div class="pulse-val green">No sells today</div><div class="pulse-label">All CUT positions have been sold</div></div>';
+      }
+
+      // Today's Buys
+      if (d.todays_buys.length > 0) {
+        h += '<h2>Buy / Add Positions</h2>';
+        for (const a of d.todays_buys) h += actionCard(a, 'buy');
+      }
+
+      // Watch List
+      if (d.watch_list.length > 0) {
+        h += '<h2>Watch List</h2>';
+        for (const a of d.watch_list) h += actionCard(a, 'watch');
+      }
+
+      // Hold Steady
+      h += '<h2>Hold Steady</h2>';
+      h += '<div class="hold-summary"><div class="pulse-val green">' + d.hold_steady.count + ' positions</div>';
+      h += '<div class="pulse-label">Worth ' + INR(d.hold_steady.value) + ' \u2014 no action needed, let them compound</div></div>';
+
+      // Weekly Goal
+      h += '<div class="preview"><div class="preview-title">This Week\u2019s Goal</div>' + d.weekly_goal + '</div>';
+
+      // Tomorrow
+      h += '<div class="preview"><div class="preview-title">Tomorrow\u2019s Preview</div>' + d.tomorrow_preview + '</div>';
+
+      // Footer
+      h += '<p style="margin-top:32px;font-size:0.75rem;color:var(--dim)">Generated ' + new Date(d.generated_at).toLocaleString('en-IN') + '. Actions are data-driven suggestions, not financial advice. Always use your own judgment. <a href="./strategy.html" style="color:var(--blue)">Read full strategy \u2192</a></p>';
+
+      document.getElementById('app').innerHTML = h;
+    }
+    load();
+  </script>
+</body>
+</html>

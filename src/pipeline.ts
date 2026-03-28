@@ -4,6 +4,7 @@ import { parseHoldingsCSV } from './csv-parser.js';
 import { enrichHoldings } from './enricher.js';
 import { computeSignals } from './signals.js';
 import { computeStrategy } from './strategy.js';
+import { computeDailyActions } from './actions.js';
 import { loadConfig, PROJECT_ROOT } from './config.js';
 import { log, err, formatINR } from './utils.js';
 import type { DashboardData, EnrichedHolding, StockSignal, SectorSummary } from './types.js';
@@ -157,6 +158,12 @@ async function main() {
   const strategyPath = resolve(publicDir, 'strategy-data.json');
   writeFileSync(strategyPath, JSON.stringify(strategy, null, 2));
   log('Strategy data written');
+
+  // Compute and write daily actions
+  const actions = computeDailyActions(enriched, strategy, brentPrice);
+  const actionsPath = resolve(publicDir, 'actions-data.json');
+  writeFileSync(actionsPath, JSON.stringify(actions, null, 2));
+  log(`Daily actions: ${actions.todays_sells.length} sells, ${actions.todays_buys.length} buys, ${actions.watch_list.length} watch`);
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   log(`Dashboard data written to ${outputPath}`);
